@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infilater Calculator</title>
+</head>
+<body>
+    <h1>Infilater: High-Precision Calculator</h1>
+    <form method="post">
+        <label for="operation">Choose an operation:</label>
+        <select id="operation" name="operation">
+            <option value="Addition">Addition</option>
+            <option value="Subtraction">Subtraction</option>
+            <option value="Multiplication">Multiplication</option>
+            <option value="Division">Division</option>
+            <option value="Modulus">Modulus</option>
+            <option value="Factorial">Factorial</option>
+            <option value="Exponentiation">Exponentiation</option>
+            <option value="Square Root">Square Root</option>
+            <option value="Sine">Sine</option>
+            <option value="Cosine">Cosine</option>
+            <option value="Tangent">Tangent</option>
+            <option value="Arcsine">Arcsine</option>
+            <option value="Arccosine">Arccosine</option>
+            <option value="Arctangent">Arctangent</option>
+            <option value="Logarithm (Base 10)">Logarithm (Base 10)</option>
+            <option value="Natural Logarithm (ln)">Natural Logarithm (ln)</option>
+            <option value="Exponential Function (e^x)">Exponential Function (e^x)</option>
+            <option value="Absolute Value">Absolute Value</option>
+            <option value="Power of 10">Power of 10</option>
+            <option value="Degrees to Radians">Degrees to Radians</option>
+            <option value="Radians to Degrees">Radians to Degrees</option>
+            <option value="Hyperbolic Sine">Hyperbolic Sine</option>
+            <option value="Hyperbolic Cosine">Hyperbolic Cosine</option>
+            <option value="Hyperbolic Tangent">Hyperbolic Tangent</option>
+            <option value="Inverse Hyperbolic Sine">Inverse Hyperbolic Sine</option>
+            <option value="Inverse Hyperbolic Cosine">Inverse Hyperbolic Cosine</option>
+            <option value="Inverse Hyperbolic Tangent">Inverse Hyperbolic Tangent</option>
+            <option value="Nth Root">Nth Root</option>
+            <option value="GCD">GCD</option>
+            <option value="LCM">LCM</option>
+            <option value="Complex Number Operations">Complex Number Operations</option>
+            <option value="Permutations">Permutations</option>
+            <option value="Combinations">Combinations</option>
+            <option value="Random Number Generation">Random Number Generation</option>
+            <option value="Matrix Multiplication">Matrix Multiplication</option>
+            <option value="Eigenvalues and Eigenvectors">Eigenvalues and Eigenvectors</option>
+            <option value="Solve Linear Equations">Solve Linear Equations</option>
+            <option value="Numerical Integration">Numerical Integration</option>
+            <option value="Numerical Differentiation">Numerical Differentiation</option>
+            <option value="Statistical Functions">Statistical Functions</option>
+        </select>
+        <br><br>
+        <label for="num1">Number 1:</label>
+        <input type="text" id="num1" name="num1">
+        <br><br>
+        <label for="num2">Number 2 (if applicable):</label>
+        <input type="text" id="num2" name="num2">
+        <br><br>
+        <!-- Additional inputs for operations like matrix or function inputs -->
+        <div id="additional-inputs">
+            <!-- Additional fields will be inserted here based on the selected operation -->
+        </div>
+        <br>
+        <input type="submit" value="Calculate">
+    </form>
+    <h2>Result:</h2>
+    <p>{{ result }}</p>
+
+    <script>
+        document.getElementById('operation').addEventListener('change', function () {
+            var value = this.value;
+            var additionalInputs = document.getElementById('additional-inputs');
+            additionalInputs.innerHTML = '';
+
+            if (value === 'Complex Number Operations') {
+                additionalInputs.innerHTML = `
+                    <label for="complex_op">Operation:</label>
+                    <select id="complex_op" name="complex_op">
+                        <option value="add">Add</option>
+                        <option value="subtract">Subtract</option>
+                        <option value="multiply">Multiply</option>
+                        <option value="divide">Divide</option>
+                    </select>
+                `;
+            } else if (value === 'Matrix Multiplication') {
+                additionalInputs.innerHTML = `
+                    <label for="matrix_a">Matrix A (rows separated by newlines, elements separated by spaces):</label>
+                    <textarea id="matrix_a" name="matrix_a" rows="3" cols="20"></textarea>
+                    <br><br>
+                    <label for="matrix_b">Matrix B (rows separated by newlines, elements separated by spaces):</label>
+                    <textarea id="matrix_b" name="matrix_b" rows="3" cols="20"></textarea>
+                `;
+            } else if (value === 'Eigenvalues and Eigenvectors' || value === 'Solve Linear Equations') {
+                additionalInputs.innerHTML = `
+                    <label for="matrix">Matrix (rows separated by newlines, elements separated by spaces):</label>
+                    <textarea id="matrix" name="matrix" rows="3" cols="20"></textarea>
+                    ${value === 'Solve Linear Equations' ? `
+                        <br><br>
+                        <label for="constants">Constants (space-separated):</label>
+                        <input type="text" id="constants" name="constants">
+                    ` : ''}
+                `;
+            } else if (value === 'Numerical Integration') {
+                additionalInputs.innerHTML = `
+                    <label for="function">Function (in terms of x):</label>
+                    <input type="text" id="function" name="function">
+                    <br><br>
+                    <label for="lower_bound">Lower Bound:</label>
+                    <input type="text" id="lower_bound" name="lower_bound">
+                    <br><br>
+                    <label for="upper_bound">Upper Bound:</label>
+                    <input type="text" id="upper_bound" name="upper_bound">
+                `;
+            } else if (value === 'Numerical Differentiation') {
+                additionalInputs.innerHTML = `
+                    <label for="function">Function (in terms of x):</label>
+                    <input type="text" id="function" name="function">
+                    <br><br>
+                    <label for="point">Point:</label>
+                    <input type="text" id="point" name="point">
+                `;
+            } else if (value === 'Statistical Functions') {
+                additionalInputs.innerHTML = `
+                    <label for="values">List of numbers (space-separated):</label>
+                    <input type="text" id="values" name="values">
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
