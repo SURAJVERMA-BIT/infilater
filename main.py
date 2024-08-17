@@ -3,21 +3,23 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.uix.switch import Switch
 from decimal import Decimal, getcontext
 import math
 import random
 from matplotlib.image import QUADRIC
 import numpy as np  # For matrix operations
 from scipy import linalg
-from sympy import Derivative  # For eigenvalues and eigenvectors
+from sympy import Derivative
 
 # Set the precision to 500 digits
-getcontext().prec = 500
+getcontext().prec = 1000
 
-def format_result(result):
-    result_str = str(result)
-    if 'E' in result_str or len(result_str) > 100:
-        return f"{result:.10E}"
+def format_result(result, use_scientific_notation):
+    if use_scientific_notation:
+        result_str = f"{result:.10E}"
+    else:
+        result_str = str(result)
     return result_str
 
 # Define your functions here
@@ -193,19 +195,28 @@ class CalculatorApp(App):
         self.num1 = TextInput(hint_text='Enter the first number you want to insert', multiline=False, input_filter='float')
         self.num2 = TextInput(hint_text='Enter the second number you want to insert', multiline=False, input_filter='float')
         self.operation = TextInput(hint_text='Add,Subtract,Multiply,Divide,Modulus,Factorial,Exponentiation,Square Root,Sine,Cosine,Tangent,Arcsine,Arccosine,Arctangent,Logarithm,Natural Logarithm,Exponential,Absolute Value,Power of 10,Degrees to Radians,Radians to Degrees,Hyperbolic Sine,Hyperbolic Cosine,Hyperbolic Tangent,Inverse Hyperbolic Sine,Inverse Hyperbolic Cosine,Inverse Hyperbolic Tangent,Nth Root,GCD,LCM,Complex Operations,Permutations,Combinations,Random Number,Matrix Multiplication,Eigenvalues and Eigenvectors,Solve Linear Equations,Numerical Integration,Numerical Differentiation,Statistical Functions', multiline=True)
-        self.result = Label(text='Result will be displayed here')
+        self.result = Label(text='Result will be displayed here my lord')
+        self.use_scientific_notation = False
 
-        calculate_button = Button(text='Calculate')
+        notation_label = Label(text='Use Scientific Notation:')
+        self.notation_switch = Switch(active=False)
+        self.notation_switch.bind(active=self.on_notation_switch)
+        
+        calculate_button = Button(text='Calculate the results')
         calculate_button.bind(on_press=self.calculate)
 
         layout.add_widget(self.num1)
         layout.add_widget(self.num2)
         layout.add_widget(self.operation)
+        layout.add_widget(notation_label)
+        layout.add_widget(self.notation_switch)
         layout.add_widget(calculate_button)
         layout.add_widget(self.result)
 
         return layout
-
+    def on_notation_switch(self, instance, value):
+        self.use_scientific_notation = value
+    
     def calculate(self, instance):
         try:
             num1 = self.num1.text
@@ -221,7 +232,7 @@ class CalculatorApp(App):
                 else:
                     result = self.operators[operation](num1, num2)
                 
-                formatted_result = format_result(result)
+                formatted_result = format_result(result, self.use_scientific_notation)
                 self.result.text = f"Result: {formatted_result}"
             else:
                 self.result.text = "Invalid Operation"

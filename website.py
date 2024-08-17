@@ -20,19 +20,22 @@ getcontext().prec = 500
 
 app = Flask(__name__)
 
-def format_result(result):
+def format_result(result, scientific):
     result_str = str(result)
-    if 'E' in result_str or len(result_str) > 100:
+    if scientific:
+        return f"{Decimal(result):.10E}"
+    elif 'E' in result_str or len(result_str) > 100:
         return f"{result:.10E}"
     return result_str
 
 @app.route("/", methods=["GET", "POST"])
-def home():
-    result = ""
-    if request.method == "POST":
-        num1 = request.form.get("num1")
-        num2 = request.form.get("num2")
-        operation = request.form.get("operation")
+def calculate():
+    result = None
+    if request.method == 'POST':
+        operation = request.form['operation']
+        num1 = float(request.form['num1']) if 'num1' in request.form and request.form['num1'] else None
+        num2 = float(request.form['num2']) if 'num2' in request.form and request.form['num2'] else None
+        scientific = 'scientific' in request.form
         
         if operation == "Addition":
             result = add(num1, num2)
@@ -132,10 +135,12 @@ def home():
             values = list(map(float, request.form.get("values").split()))
             result = f"Mean: {mean(values)}\nMedian: {median(values)}\nStandard Deviation: {standard_deviation(values)}"
 
-        formatted_result = format_result(result)
-        return render_template("index.html", result=formatted_result)
+        if not scientific:
+            result = f"{result:.15f}".rstrip('0').rstrip('.')  # Ensure standard notation
+        else:
+            result = f"{result:.15e}"
 
-    return render_template("index.html", result="")
+    return render_template("index.html", result=result)
 
 if __name__ == "__main__":
     app.run(debug=True)

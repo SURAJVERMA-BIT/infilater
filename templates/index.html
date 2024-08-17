@@ -52,19 +52,29 @@
             <option value="Statistical Functions">Statistical Functions</option>
         </select>
         <br><br>
+
         <label for="num1">Number 1:</label>
         <input type="text" id="num1" name="num1">
         <br><br>
+
         <label for="num2">Number 2 (if applicable):</label>
         <input type="text" id="num2" name="num2">
         <br><br>
+
+        <!-- Checkbox for Scientific Notation -->
+        <label for="scientific">Show result in scientific notation:</label>
+        <input type="checkbox" id="scientific" name="scientific">
+        <br><br>
+
         <!-- Additional inputs for operations like matrix or function inputs -->
         <div id="additional-inputs">
             <!-- Additional fields will be inserted here based on the selected operation -->
         </div>
         <br>
+
         <input type="submit" value="Calculate">
     </form>
+
     <h2>Result:</h2>
     <p>{{ result }}</p>
 
